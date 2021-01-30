@@ -7,6 +7,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.bridgelabz.onlinebookstore.dto.UserDTO;
+
 import lombok.Data;
 import lombok.ToString;
 
@@ -42,5 +44,15 @@ public @Data @ToString class User {
 		this.password = password;
 		this.isVerify = isVerify;
 		this.type = type;
+	}
+
+	public User(UserDTO userDTO) {
+		 this.firstName = userDTO.firstName;
+		 this.lastName = userDTO.lastName;
+		 this.email = userDTO.email;
+		 this.phoneNumber = userDTO.phoneNumber;
+		 this.address = userDTO.address;
+		 this.password = userDTO.password;
+		 this.type = userDTO.type;	
 	}
 }
