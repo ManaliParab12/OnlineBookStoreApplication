@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -40,10 +42,18 @@ public class UserController {
 	}
 	
 	@GetMapping("/all")
-	public ResponseEntity<ResponseDTO> getUser() {
+	public ResponseEntity<ResponseDTO> getAllUser() {
 		 List<User> userList = null;
 	     userList = userService.getAllUser();
 	     ResponseDTO responseDTO = new ResponseDTO("List of Users", userList);
+	     return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
+	}
+	
+	@PutMapping("/update/{email}")
+	public ResponseEntity<ResponseDTO> updateUser(@Valid @PathVariable ("email") String email, UserDTO userDTO) {
+		 User user = null;
+		 user = userService.updateUser(email, userDTO);
+		 ResponseDTO responseDTO = new ResponseDTO("User Details Updated Successfully", user);
 	     return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
 	}
 	

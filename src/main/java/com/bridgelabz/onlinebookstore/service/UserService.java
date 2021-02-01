@@ -32,5 +32,10 @@ public class UserService implements IUserService {
 		return userRepository.findAll();
 	}
 
-
+	@Override
+	public User updateUser(String email, UserDTO userDTO) {
+		 User user = userRepository.findByEmail(email).get();
+		 user.updateUser(userDTO);
+	     return userRepository.save(user);
+	}
 }

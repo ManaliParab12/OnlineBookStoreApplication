@@ -47,12 +47,16 @@ public @Data @ToString class User {
 	}
 
 	public User(UserDTO userDTO) {
+		this.updateUser(userDTO);
+	}
+
+	public void updateUser(UserDTO userDTO) {
 		 this.firstName = userDTO.firstName;
 		 this.lastName = userDTO.lastName;
 		 this.email = userDTO.email;
 		 this.phoneNumber = userDTO.phoneNumber;
 		 this.address = userDTO.address;
 		 this.password = userDTO.password;
-		 this.type = userDTO.type;	
+		 this.type = userDTO.type;			
 	}
 }
