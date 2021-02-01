@@ -6,11 +6,12 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import com.bridgelabz.onlinebookstore.dto.UserDTO;
+import com.bridgelabz.onlinebookstore.exception.UserException;
 import com.bridgelabz.onlinebookstore.model.User;
 
 public interface IUserService {
 	
-	User registerUser(UserDTO userDTO);
+	User registerUser(UserDTO userDTO) throws UserException;
 
 	Optional<User> getUserByEmail(String email);
 

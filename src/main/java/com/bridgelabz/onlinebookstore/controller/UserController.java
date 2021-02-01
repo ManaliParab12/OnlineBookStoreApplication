@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bridgelabz.onlinebookstore.dto.ResponseDTO;
 import com.bridgelabz.onlinebookstore.dto.UserDTO;
+import com.bridgelabz.onlinebookstore.exception.UserException;
 import com.bridgelabz.onlinebookstore.model.User;
 import com.bridgelabz.onlinebookstore.service.IUserService;
 
@@ -30,7 +31,7 @@ public class UserController {
 	private IUserService userService;
 	
 	@PostMapping("/register")
-	public ResponseEntity<ResponseDTO> registerUser( @Valid @RequestBody UserDTO userDTO) {
+	public ResponseEntity<ResponseDTO> registerUser( @Valid @RequestBody UserDTO userDTO) throws UserException {
 		User user = null;
 		user = userService.registerUser(userDTO);
 		ResponseDTO responseDTO = new ResponseDTO("User Registered Successfully", user);
