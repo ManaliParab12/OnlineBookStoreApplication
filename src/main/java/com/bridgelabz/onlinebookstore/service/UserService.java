@@ -1,5 +1,6 @@
 package com.bridgelabz.onlinebookstore.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,11 @@ public class UserService implements IUserService {
 
 	public Optional<User> getUserByEmail(String email) {
 		return userRepository.findByEmail(email);
+	}
+
+	@Override
+	public List<User> getAllUser() {
+		return userRepository.findAll();
 	}
 
 

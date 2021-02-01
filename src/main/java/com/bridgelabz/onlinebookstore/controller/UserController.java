@@ -1,5 +1,7 @@
 package com.bridgelabz.onlinebookstore.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +20,7 @@ import com.bridgelabz.onlinebookstore.model.User;
 import com.bridgelabz.onlinebookstore.service.IUserService;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
 	
 	@Autowired
@@ -36,4 +38,15 @@ public class UserController {
 	public ResponseEntity<User> getUser(@RequestParam("email") String email) {
 		return new ResponseEntity<>(userService.getUserByEmail(email).get(), HttpStatus.OK);		
 	}
+	
+	@GetMapping("/all")
+	public ResponseEntity<ResponseDTO> getUser() {
+		 List<User> userList = null;
+	     userList = userService.getAllUser();
+	     ResponseDTO responseDTO = new ResponseDTO("List of Users", userList);
+	     return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
+	}
+	
+	
+	
 }
