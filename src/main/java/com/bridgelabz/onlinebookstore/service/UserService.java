@@ -38,4 +38,12 @@ public class UserService implements IUserService {
 		 user.updateUser(userDTO);
 	     return userRepository.save(user);
 	}
+	
+	@Override
+    public User deleteUser(String email) {
+        User user = this.getUserByEmail(email).get();
+        userRepository.delete(user);
+        return user;
+    }
+	
 }

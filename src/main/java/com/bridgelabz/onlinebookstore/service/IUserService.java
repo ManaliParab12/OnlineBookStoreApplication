@@ -18,4 +18,6 @@ public interface IUserService {
 
 	User updateUser(String email, UserDTO userDTO);
 
+	User deleteUser(String email);
+
 }
