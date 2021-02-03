@@ -21,6 +21,7 @@ import com.bridgelabz.onlinebookstore.dto.ResponseDTO;
 import com.bridgelabz.onlinebookstore.dto.UserDTO;
 import com.bridgelabz.onlinebookstore.exception.UserException;
 import com.bridgelabz.onlinebookstore.model.User;
+import com.bridgelabz.onlinebookstore.service.IEmailService;
 import com.bridgelabz.onlinebookstore.service.IUserService;
 
 @RestController
@@ -30,12 +31,14 @@ public class UserController {
 	@Autowired
 	private IUserService userService;
 	
+	@Autowired
+	private IEmailService emailService;
+	
 	@PostMapping("/register")
 	public ResponseEntity<ResponseDTO> registerUser( @Valid @RequestBody UserDTO userDTO) throws UserException {
-		User user = null;
-		user = userService.registerUser(userDTO);
-		ResponseDTO responseDTO = new ResponseDTO("User Registered Successfully", user);
-        return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);		
+		User user = userService.registerUser(userDTO);
+		ResponseDTO responseDTO =  emailService.RegistrationMail(user);
+        return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);	
 	}
 	
 	@GetMapping("/user")
@@ -43,7 +46,7 @@ public class UserController {
 		return new ResponseEntity<>(userService.getUserByEmail(email).get(), HttpStatus.OK);		
 	}
 	
-	@GetMapping("/all")
+	@GetMapping("/allusers")
 	public ResponseEntity<ResponseDTO> getAllUser() {
 		 List<User> userList = null;
 	     userList = userService.getAllUser();
