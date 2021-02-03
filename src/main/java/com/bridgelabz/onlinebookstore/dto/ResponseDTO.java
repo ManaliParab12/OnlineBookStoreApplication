@@ -11,5 +11,9 @@ public @Data class ResponseDTO {
 		this.message = message;
 		this.data = data;
 	}
+	
+	public static ResponseDTO getResponse(String message, Object data ) {
+		return new ResponseDTO(message, data);
+	}
 
 }
