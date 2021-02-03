@@ -15,17 +15,18 @@ public class EmailService implements IEmailService {
 	@Autowired
 	JavaMailSender mailSender;	
 	
-	public void sendRegistrationMail(User user) {
+	public void sendMail(User user) {
 		SimpleMailMessage mailMessage = new SimpleMailMessage();
 		mailMessage.setTo(user.getEmail());
 		mailMessage.setSubject("Verification Link");
 		mailMessage.setText("Thank you for registration");
 		mailSender.send(mailMessage);		
 	}
-
-	public ResponseDTO verificationMail(User user) {
+	
+	@Override
+	public ResponseDTO RegistrationMail(User user) {
 		String token = Token.generateToken(user.getId());
-		this.sendRegistrationMail(user);
+		this.sendMail(user);
 		return ResponseDTO.getResponse("verification mail sent",token);
 	}
 }
