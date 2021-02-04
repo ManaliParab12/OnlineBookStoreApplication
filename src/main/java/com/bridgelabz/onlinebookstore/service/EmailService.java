@@ -27,11 +27,11 @@ public class EmailService implements IEmailService {
 	@Override
 	public ResponseDTO sendVerificationMail(User user) {
 		String token = Token.generateToken(user.getId());
-		this.sendMail(new EmailDTO(user.getEmail(), "verification Link ", getVerificationURL(token)));
+		this.sendMail(new EmailDTO(user.getEmail(), "verification Link ", verificationURL(token)));
 		return new ResponseDTO("verification mail sent");
 	}
 	
-	private String getVerificationURL(String token) {
+	private String verificationURL(String token) {
 		System.out.println("Token : " +token);
 		return "Click on below link to verify \n" +
 				"http://localhost:8080/swagger-ui.html#!/user-controller/verifyUserUsingGET" +
