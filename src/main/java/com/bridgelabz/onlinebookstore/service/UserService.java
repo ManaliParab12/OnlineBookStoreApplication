@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.bridgelabz.onlinebookstore.dto.ResponseDTO;
@@ -22,14 +23,20 @@ public class UserService implements IUserService {
 	 @Autowired
 	 private IEmailService emailService;
 	 
+	 @Autowired
+	 private BCryptPasswordEncoder bCryptPasswordEncoder;
+	 
 	 public ResponseDTO registerUser(UserDTO userDTO) throws UserException {
+		 String password = bCryptPasswordEncoder.encode(userDTO.getPassword());
 		 User user = new User(userDTO);
 	     if(userRepository.findByEmail(user.getEmail()).isPresent())
 	    	 throw new UserException("User is Already Registered with this Email Id");
+	     user.setPassword(password);
 	     userRepository.save(user);
 	     emailService.sendVerificationMail(user);
 	     return new ResponseDTO("User Registered successfully");
 	}
+	 
 	 
 	@Override
 	public ResponseDTO verifyUser(String token) {
@@ -45,10 +52,11 @@ public class UserService implements IUserService {
 		User user = userRepository.findByEmail(userDTO.getEmail())
 				.orElseThrow(() -> new UserException("User Not Found"));
 		//String token = Token.generateToken(user.getId());
-		if(user.getPassword().equals(userDTO.getPassword()) && user.isVerify())
+		if(bCryptPasswordEncoder.matches(userDTO.getPassword(), user.getPassword()) && user.isVerify())
 			return new ResponseDTO("login Successfull");
 		throw new UserException("User not Verified");
 	}
+	
 	 
 	public Optional<User> getUserByEmail(String email) {
 		return userRepository.findByEmail(email);
