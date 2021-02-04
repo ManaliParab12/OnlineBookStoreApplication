@@ -5,6 +5,6 @@ import com.bridgelabz.onlinebookstore.model.User;
 
 public interface IEmailService {
 
-	ResponseDTO  RegistrationMail(User user);
+	ResponseDTO  sendVerificationMail(User user);
 
 }
