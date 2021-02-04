@@ -26,5 +26,5 @@ public interface IUserService {
 
 	ResponseDTO deleteUser(String email);
 
-
+	ResponseDTO resetPassword(String token, UserDTO userDTO);
 }

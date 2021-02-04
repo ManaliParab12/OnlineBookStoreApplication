@@ -82,6 +82,15 @@ public class UserService implements IUserService {
 	}
 	
 	@Override
+	public ResponseDTO resetPassword(String token, UserDTO userDTO) {
+		int userId = Token.decodeToken(token);
+		User user = userRepository.findById(userId).get();
+		user.setPassword(userDTO.password);
+		userRepository.save(user);
+		return ResponseDTO.getResponse("Password Changed successfully", user);
+	}	
+	
+	@Override
     public ResponseDTO deleteUser(String email) {
         User user = this.getUserByEmail(email).get();
         userRepository.delete(user);
