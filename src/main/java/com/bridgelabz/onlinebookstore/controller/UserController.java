@@ -68,6 +68,12 @@ public class UserController {
 	     return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
 	}
 	
+	@PutMapping("/forget-password")
+	public ResponseEntity<ResponseDTO> sendResetPasswordMail(@Valid @RequestParam ("email") String email) {			
+	    ResponseDTO responseDTO = userService.forgetPassword(email);
+	    return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);	
+	}
+	
 	@DeleteMapping("/delete/{email}")
 	public ResponseEntity<ResponseDTO> deleteUser(@PathVariable ("email") String email) {
 		ResponseDTO responseDTO = userService.deleteUser(email);

@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import com.bridgelabz.onlinebookstore.dto.ResponseDTO;
 import com.bridgelabz.onlinebookstore.dto.UserDTO;
 import com.bridgelabz.onlinebookstore.exception.UserException;
@@ -72,6 +71,14 @@ public class UserService implements IUserService {
 		 User user = userRepository.findByEmail(email).get();
 		 user.updateUser(userDTO);
 		 return ResponseDTO.getResponse("User Details updated", user);
+	}
+	
+	@Override
+	public ResponseDTO forgetPassword(String email) {
+		User user = userRepository.findByEmail(email)
+				.orElseThrow(() -> new RuntimeException("User Not Found"));
+		emailService.sendResetPasswordMail(user);
+		return new ResponseDTO("Reset Password link sent to your registered email id" );
 	}
 	
 	@Override

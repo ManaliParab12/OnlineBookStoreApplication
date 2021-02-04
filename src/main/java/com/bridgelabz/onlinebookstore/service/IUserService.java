@@ -15,6 +15,8 @@ public interface IUserService {
 	ResponseDTO verifyUser(String token);
 	
 	ResponseDTO userLogin(UserDTO userDTO) throws UserException;
+	
+	 ResponseDTO forgetPassword(String email);
 
 	Optional<User> getUserByEmail(String email);
 
