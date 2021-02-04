@@ -37,5 +37,17 @@ public class EmailService implements IEmailService {
 				"http://localhost:8080/swagger-ui.html#!/user-controller/verifyUserUsingGET" +
 				"\n Token : " +token;
 	}
-
+	
+	@Override
+	public ResponseDTO sendResetPasswordMail(User user) {
+		String token = Token.generateToken(user.getId());
+		this.sendMail(new EmailDTO(user.getEmail(), "Reset Password Link", resetURL(token)));
+		return new ResponseDTO("Reset Password link " );
+	}
+	
+	private String resetURL(String token) {
+		return "Click on below link to Reset your Password \n" +
+				"http://localhost:8080/swagger-ui.html#!/user-controller/resetPasswordUsingPOST" +
+				"\n token : " +token;				
+	}
 }
