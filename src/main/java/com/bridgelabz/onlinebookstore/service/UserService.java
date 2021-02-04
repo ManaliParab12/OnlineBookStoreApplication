@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bridgelabz.onlinebookstore.dto.ResponseDTO;
 import com.bridgelabz.onlinebookstore.dto.UserDTO;
 import com.bridgelabz.onlinebookstore.exception.UserException;
 import com.bridgelabz.onlinebookstore.model.User;
@@ -17,15 +18,18 @@ public class UserService implements IUserService {
 	 @Autowired
 	 private UserRepository userRepository;
 	 
-	 public User registerUser(UserDTO userDTO) throws UserException {
-		 User user = null;
-	     user = new User(userDTO);
+	 @Autowired
+	 private IEmailService emailService;
+	 
+	 public ResponseDTO registerUser(UserDTO userDTO) throws UserException {
+		 User user = new User(userDTO);
 	     if(userRepository.findByEmail(user.getEmail()).isPresent())
 	    	 throw new UserException("User is Already Registered with this Email Id");
-	     user = userRepository.save(user);
-	     return user;
+	     userRepository.save(user);
+	     emailService.registrationVerificationMail(user);
+	     return new ResponseDTO("User Registered successfully");
 	}
-
+	 
 	public Optional<User> getUserByEmail(String email) {
 		return userRepository.findByEmail(email);
 	}
@@ -36,17 +40,16 @@ public class UserService implements IUserService {
 	}
 
 	@Override
-	public User updateUser(String email, UserDTO userDTO) {
+	public ResponseDTO updateUser(String email, UserDTO userDTO) {
 		 User user = userRepository.findByEmail(email).get();
 		 user.updateUser(userDTO);
-	     return userRepository.save(user);
+		 return ResponseDTO.getResponse("User Details updated", user);
 	}
 	
 	@Override
-    public User deleteUser(String email) {
+    public ResponseDTO deleteUser(String email) {
         User user = this.getUserByEmail(email).get();
         userRepository.delete(user);
-        return user;
-    }
-	
+        return ResponseDTO.getResponse("User Deleted", user);
+    }	
 }
