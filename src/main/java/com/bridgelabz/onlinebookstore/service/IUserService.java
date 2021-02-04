@@ -11,6 +11,10 @@ import com.bridgelabz.onlinebookstore.model.User;
 public interface IUserService {
 	
 	ResponseDTO registerUser(UserDTO userDTO) throws UserException;
+	
+	ResponseDTO verifyUser(String token);
+	
+	ResponseDTO userLogin(UserDTO userDTO) throws UserException;
 
 	Optional<User> getUserByEmail(String email);
 

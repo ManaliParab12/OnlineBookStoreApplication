@@ -11,6 +11,7 @@ import com.bridgelabz.onlinebookstore.dto.UserDTO;
 import com.bridgelabz.onlinebookstore.exception.UserException;
 import com.bridgelabz.onlinebookstore.model.User;
 import com.bridgelabz.onlinebookstore.repository.UserRepository;
+import com.bridgelabz.onlinebookstore.utility.Token;
 
 @Service
 public class UserService implements IUserService {
@@ -26,8 +27,27 @@ public class UserService implements IUserService {
 	     if(userRepository.findByEmail(user.getEmail()).isPresent())
 	    	 throw new UserException("User is Already Registered with this Email Id");
 	     userRepository.save(user);
-	     emailService.registrationVerificationMail(user);
+	     emailService.sendVerificationMail(user);
 	     return new ResponseDTO("User Registered successfully");
+	}
+	 
+	@Override
+	public ResponseDTO verifyUser(String token) {
+		int userId = Token.decodeToken(token);
+		User user = userRepository.findById(userId).get();
+		user.setVerify(true);
+		userRepository.save(user);
+		return ResponseDTO.getResponse("User Verified Successfully", user);
+	}
+	
+	@Override
+	public ResponseDTO userLogin(UserDTO userDTO) throws UserException {
+		User user = userRepository.findByEmail(userDTO.getEmail())
+				.orElseThrow(() -> new UserException("User Not Found"));
+		//String token = Token.generateToken(user.getId());
+		if(user.getPassword().equals(userDTO.getPassword()) && user.isVerify())
+			return new ResponseDTO("login Successfull");
+		throw new UserException("User not Verified");
 	}
 	 
 	public Optional<User> getUserByEmail(String email) {
