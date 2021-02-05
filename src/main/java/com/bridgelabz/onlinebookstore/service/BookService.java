@@ -1,5 +1,7 @@
 package com.bridgelabz.onlinebookstore.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +36,12 @@ public class BookService implements IBookService {
 		} else {
 			return new ResponseDTO("Action not allowed");	
 		}	
+	}
+	
+	@Override
+	public List<Book> getAllBooks() {
+		List<Book> books = bookRepository.findAll();
+		return books;
 	}
 
 }
