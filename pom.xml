@@ -82,6 +82,12 @@
     		<artifactId>spring-security-web</artifactId>
     		<version>5.4.2</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.opencsv/opencsv -->
+		<dependency>
+    		<groupId>com.opencsv</groupId>
+    		<artifactId>opencsv</artifactId>
+    		<version>4.4</version>
+		</dependency>
 	</dependencies>
 
 	<build>
