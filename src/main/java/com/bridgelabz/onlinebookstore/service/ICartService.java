@@ -14,7 +14,6 @@ public interface ICartService {
 	ResponseDTO  updateCart(String token, int bookId, int quantity) throws UserException;
 	
 	List<Cart> getListOfBooksInCart(String token);
-
-
-
+	
+	ResponseDTO  removeBookFromCart(int bookId, String token);
 }

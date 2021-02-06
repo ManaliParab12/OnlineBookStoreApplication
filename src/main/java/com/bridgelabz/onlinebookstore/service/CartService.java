@@ -50,5 +50,15 @@ public class CartService implements ICartService {
 	public List<Cart> getListOfBooksInCart(String email) {
 	    return cartRepository.findAllBooksByUser(userRepository.findByEmail(email).get());
 	}
+	
+	@Override
+	public ResponseDTO removeBookFromCart(int bookId, String token) {
+		int userId = Token.decodeToken(token);
+		Optional<Cart> carts = cartRepository.findByBookAndUser(bookRepository.findById(bookId).get()
+		                , userRepository.findById(userId).get());
+		Cart cart = carts.orElseThrow(() -> new RuntimeException("INVALID_BOOK_ID"));
+		cartRepository.deleteById(cart.getId());
+		return new ResponseDTO("Book Removed from cart"); 	
+	}
 
 }

@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,5 +46,11 @@ public class CartController {
 	public ResponseEntity<List<Cart>> getListOfBooksInCart(@RequestHeader("email") String email) {
 	    return new ResponseEntity<>(cartService.getListOfBooksInCart(email), HttpStatus.OK);
 	}
-
+	
+	@DeleteMapping("/remove-book/{book-id}")
+	public ResponseEntity<ResponseDTO> removeBookFromCart(@PathVariable(value = "book-id") int bookId
+            ,@RequestHeader("Token") String token)  {
+		ResponseDTO responseDTO = cartService.removeBookFromCart(bookId, token);
+	    return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
+	}
 }
