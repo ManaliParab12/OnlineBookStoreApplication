@@ -46,6 +46,24 @@ public class BookService implements IBookService {
 	}
 	
 	@Override
+	public ResponseDTO addAllBook(String token) throws UserException {
+		int id = Token.decodeToken(token);
+		System.out.println("Printing token" +id);
+		User user = userRepository.findById(id)
+					.orElseThrow(() ->  new UserException("User Not Found"));
+		if(user.getType().equalsIgnoreCase("admin")) {
+		List<Book> bookList = getBookFromCsv();
+		bookList.forEach(book -> {
+			book.setBookQuantity(5);
+			bookRepository.save(book);
+		});
+		return new ResponseDTO("Book Added Successfully");	
+	} else {
+		return new ResponseDTO("Action not allowed");	
+	}			
+}
+	
+	@Override
 	public List<Book> getAllBooks() {
 		List<Book> books = bookRepository.findAll();
 		return books;

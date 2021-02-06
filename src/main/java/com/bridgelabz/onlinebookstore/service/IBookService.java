@@ -11,6 +11,8 @@ public interface IBookService {
 	
 	ResponseDTO addBook(String token, BookDTO bookDTO) throws UserException;
 	
+	ResponseDTO addAllBook(String token) throws UserException;
+	
 	List<Book> getAllBooks();
 
 }

@@ -31,6 +31,11 @@ public class BookController {
 		return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
 	}
 	
+	@PostMapping("/addallbooks")
+	public ResponseEntity<ResponseDTO> addAllBooks(@RequestHeader String token) throws UserException{
+		ResponseDTO responseDTO = bookService.addAllBook(token);
+		return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
+	}	
 	@GetMapping("/allbooks")
 	public ResponseEntity<ResponseDTO> getBooks(){
 		List<Book> bookList = bookService.getAllBooks();
