@@ -1,5 +1,6 @@
 package com.bridgelabz.onlinebookstore.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,11 @@ public class CartService implements ICartService {
 	    cart.setQuantity(quantity);
 	    cartRepository.save(cart);
 	    return new  ResponseDTO("Book Quantity updated"); 
+	}
+	
+	@Override
+	public List<Cart> getListOfBooksInCart(String email) {
+	    return cartRepository.findAllBooksByUser(userRepository.findByEmail(email).get());
 	}
 
 }
