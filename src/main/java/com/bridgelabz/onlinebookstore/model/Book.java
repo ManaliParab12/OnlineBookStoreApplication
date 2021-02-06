@@ -5,9 +5,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 
 import com.bridgelabz.onlinebookstore.dto.BookDTO;
+import com.opencsv.bean.CsvBindByName;
 
 import lombok.Data;
 
@@ -20,16 +22,22 @@ public @Data class Book {
 	@Column(name = "book_id")
 	private int id;
 
+	@CsvBindByName(column = "title")
 	private String bookName;
 
+	@CsvBindByName(column = "author")
 	private String bookAuthor;
 	
+	@CsvBindByName(column = "image")
 	private String bookImage;
 	
 	private int bookQuantity;
 	
+	@CsvBindByName(column = "price")
 	private double bookPrice;
 	
+	@CsvBindByName(column = "description")
+	@Lob	
 	private String bookDescription;
 	
 	public Book() { }
