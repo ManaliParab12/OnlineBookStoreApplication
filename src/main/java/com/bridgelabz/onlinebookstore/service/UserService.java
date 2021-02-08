@@ -33,7 +33,7 @@ public class UserService implements IUserService {
 	     user.setPassword(password);
 	     userRepository.save(user);
 	     emailService.sendVerificationMail(user);
-	     return new ResponseDTO("User Registered successfully");
+	     return new ResponseDTO("Registration successful, verification link has been sent to your email id:" , user.getEmail());
 	}
 	 
 	 
@@ -49,11 +49,10 @@ public class UserService implements IUserService {
 	@Override
 	public ResponseDTO userLogin(UserDTO userDTO) throws UserException {
 		User user = userRepository.findByEmail(userDTO.getEmail())
-				.orElseThrow(() -> new UserException("User Not Found"));
-		//String token = Token.generateToken(user.getId());
+				.orElseThrow(() -> new UserException("Unable to locate account with this ID"));
 		if(bCryptPasswordEncoder.matches(userDTO.getPassword(), user.getPassword()) && user.isVerify())
 			return new ResponseDTO("login Successfull");
-		throw new UserException("User not Verified");
+		throw new UserException("Identity Verification, Action Required!");
 	}
 	
 	 
@@ -70,7 +69,7 @@ public class UserService implements IUserService {
 	public ResponseDTO updateUser(String email, UserDTO userDTO) {
 		 User user = userRepository.findByEmail(email).get();
 		 user.updateUser(userDTO);
-		 return ResponseDTO.getResponse("User Details updated", user);
+		 return ResponseDTO.getResponse("Record updated successfully", user);
 	}
 	
 	@Override
@@ -78,22 +77,24 @@ public class UserService implements IUserService {
 		User user = userRepository.findByEmail(email)
 				.orElseThrow(() -> new RuntimeException("User Not Found"));
 		emailService.sendResetPasswordMail(user);
-		return new ResponseDTO("Reset Password link sent to your registered email id" );
+		return new ResponseDTO("Reset Password link has been sent to your registered email id : " +user.getEmail() );
 	}
 	
 	@Override
 	public ResponseDTO resetPassword(String token, UserDTO userDTO) {
+		String password = bCryptPasswordEncoder.encode(userDTO.getPassword());
 		int userId = Token.decodeToken(token);
 		User user = userRepository.findById(userId).get();
-		user.setPassword(userDTO.password);
+		user.setPassword(password);
 		userRepository.save(user);
-		return ResponseDTO.getResponse("Password Changed successfully", user);
-	}	
+		return ResponseDTO.getResponse("Your password has been changed successfully!", user);
+	}
+	
 	
 	@Override
     public ResponseDTO deleteUser(String email) {
         User user = this.getUserByEmail(email).get();
         userRepository.delete(user);
-        return ResponseDTO.getResponse("User Deleted", user);
+        return ResponseDTO.getResponse("Record has been successfully deleted", user);
     }	
 }

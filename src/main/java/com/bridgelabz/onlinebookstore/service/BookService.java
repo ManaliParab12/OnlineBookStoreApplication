@@ -41,7 +41,7 @@ public class BookService implements IBookService {
 			bookRepository.save(book);
 			return new ResponseDTO("Book Added Successfully");
 		} else {
-			return new ResponseDTO("Action not allowed");	
+			return new ResponseDTO("You do not have permission to add book");	
 		}	
 	}
 	
@@ -59,7 +59,7 @@ public class BookService implements IBookService {
 		});
 		return new ResponseDTO("Book Added Successfully");	
 	} else {
-		return new ResponseDTO("Action not allowed");	
+		return new ResponseDTO("You do not have permission to add book");	
 	}			
 }
 	

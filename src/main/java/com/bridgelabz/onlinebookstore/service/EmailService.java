@@ -28,7 +28,7 @@ public class EmailService implements IEmailService {
 	public ResponseDTO sendVerificationMail(User user) {
 		String token = Token.generateToken(user.getId());
 		this.sendMail(new EmailDTO(user.getEmail(), "verification Link ", verificationURL(token)));
-		return new ResponseDTO("verification mail sent");
+		return new ResponseDTO("verification link has been sent to your registered email id : " +user.getEmail());
 	}
 	
 	private String verificationURL(String token) {
@@ -42,12 +42,12 @@ public class EmailService implements IEmailService {
 	public ResponseDTO sendResetPasswordMail(User user) {
 		String token = Token.generateToken(user.getId());
 		this.sendMail(new EmailDTO(user.getEmail(), "Reset Password Link", resetURL(token)));
-		return new ResponseDTO("Reset Password link " );
+		return new ResponseDTO("Reset Password link has been sent to your registered email id : " +user.getEmail());
 	}
 	
 	private String resetURL(String token) {
 		return "Click on below link to Reset your Password \n" +
 				"http://localhost:8080/swagger-ui.html#!/user-controller/resetPasswordUsingPOST" +
-				"\n token : " +token;				
+				"\n Token : " +token;				
 	}
 }
