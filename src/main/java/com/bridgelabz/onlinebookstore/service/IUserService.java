@@ -12,19 +12,19 @@ public interface IUserService {
 	
 	ResponseDTO registerUser(UserDTO userDTO) throws UserException;
 	
-	ResponseDTO verifyUser(String token);
+	ResponseDTO verifyUser(String token) throws UserException;
 	
 	ResponseDTO userLogin(UserDTO userDTO) throws UserException;
 	
-	 ResponseDTO forgetPassword(String email);
+	 ResponseDTO forgetPassword(String email) throws UserException;
 
 	Optional<User> getUserByEmail(String email);
 
 	List<User> getAllUser();
 
-	ResponseDTO updateUser(String email, UserDTO userDTO);
+	ResponseDTO updateUser(String email, UserDTO userDTO) throws UserException;
 
-	ResponseDTO deleteUser(String email);
+	ResponseDTO deleteUser(String email) throws UserException;
 
-	ResponseDTO resetPassword(String token, UserDTO userDTO);
+	ResponseDTO resetPassword(String token, UserDTO userDTO) throws UserException;
 }

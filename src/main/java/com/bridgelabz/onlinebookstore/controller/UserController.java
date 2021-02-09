@@ -25,23 +25,29 @@ import com.bridgelabz.onlinebookstore.model.User;
 import com.bridgelabz.onlinebookstore.service.IUserService;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/user")
 public class UserController {
 	
 	@Autowired
-	private IUserService userService;
-	
+	private IUserService userService;	
 	
 	@PostMapping("/register")
-	public ResponseEntity<ResponseDTO> registerUser( @Valid @RequestBody UserDTO userDTO) throws UserException {
-		ResponseDTO responseDTO =  userService.registerUser(userDTO);
+	public ResponseEntity<ResponseDTO> registerUser(@Valid @RequestBody UserDTO userDTO) throws UserException {
+		ResponseDTO responseDTO = null;
+		try {
+			responseDTO =  userService.registerUser(userDTO);
+		} catch (UserException e) {
+		return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.CONFLICT);	
+		}
         return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);	
 	}
 	
+	
 	@GetMapping("/verify/{token}")
-	public ResponseEntity<ResponseDTO> verifyUser(@RequestHeader String token){
+	public ResponseEntity<ResponseDTO> verifyUser(@RequestHeader ("Token") String token) throws UserException {
         return new ResponseEntity<ResponseDTO>(userService.verifyUser(token), HttpStatus.OK);		
 	}
+	
 	
 	@PutMapping("/login")
 	public ResponseEntity<ResponseDTO> loginUser(@RequestBody UserDTO userDTO) throws UserException {
@@ -49,10 +55,12 @@ public class UserController {
 		 return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);		
 	}
 	
-	@GetMapping("/user")
+	
+	@GetMapping("/Get")
 	public ResponseEntity<User> getUser(@RequestParam("email") String email) {
 		return new ResponseEntity<>(userService.getUserByEmail(email).get(), HttpStatus.OK);		
 	}
+	
 	
 	@GetMapping("/allusers")
 	public ResponseEntity<ResponseDTO> getAllUser() {
@@ -62,26 +70,31 @@ public class UserController {
 	     return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
 	}
 	
+	
 	@PutMapping("/update/{email}")
-	public ResponseEntity<ResponseDTO> updateUser(@Valid @PathVariable ("email") String email, UserDTO userDTO) {
+	public ResponseEntity<ResponseDTO> updateUser(@Valid @RequestParam ("email") String email, UserDTO userDTO) throws UserException {
 		 ResponseDTO responseDTO = userService.updateUser(email, userDTO);
 	     return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
 	}
 	
+	
 	@PutMapping("/forget-password")
-	public ResponseEntity<ResponseDTO> sendResetPasswordMail(@Valid @RequestParam ("email") String email) {			
+	public ResponseEntity<ResponseDTO> sendResetPasswordMail(@Valid @RequestParam ("email") String email) throws UserException {			
 	    ResponseDTO responseDTO = userService.forgetPassword(email);
 	    return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);	
 	}
 	
+	
 	@PostMapping("/reset-password/{token}")
-	public ResponseEntity<ResponseDTO> resetPassword(@RequestHeader String token, @RequestBody UserDTO userDTO ) {
+	public ResponseEntity<ResponseDTO> resetPassword(@RequestHeader ("Token") String token, @RequestBody UserDTO userDTO ) throws UserException {
 		return new ResponseEntity<ResponseDTO>(userService.resetPassword(token, userDTO), HttpStatus.OK);
 	}
 	
+	
 	@DeleteMapping("/delete/{email}")
-	public ResponseEntity<ResponseDTO> deleteUser(@PathVariable ("email") String email) {
+	public ResponseEntity<ResponseDTO> deleteUser(@RequestParam ("email") String email) throws UserException {
 		ResponseDTO responseDTO = userService.deleteUser(email);
 	    return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
-	}	
+	}
+	
 }

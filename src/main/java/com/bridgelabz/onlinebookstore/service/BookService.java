@@ -8,6 +8,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import com.bridgelabz.onlinebookstore.dto.BookDTO;
@@ -22,7 +24,11 @@ import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 
 @Service
+@PropertySource("classpath:status.properties")
 public class BookService implements IBookService {
+	
+	@Autowired
+	private Environment environment;
 	
 	@Autowired
 	private BookRepository bookRepository;
@@ -35,7 +41,7 @@ public class BookService implements IBookService {
 	public ResponseDTO addBook(String token, BookDTO bookDTO) throws UserException {
 		int id = Token.decodeToken(token);
 		User user = userRepository.findById(id)
-				.orElseThrow(() ->  new UserException("User Not Found"));
+				.orElseThrow(() ->  new UserException(environment.getProperty("status.login.error.message")));
 		Book book = new Book(bookDTO);
 		if(user.getType().equalsIgnoreCase("admin")) {
 			bookRepository.save(book);
@@ -45,12 +51,13 @@ public class BookService implements IBookService {
 		}	
 	}
 	
+	
 	@Override
 	public ResponseDTO addAllBook(String token) throws UserException {
 		int id = Token.decodeToken(token);
 		System.out.println("Printing token" +id);
 		User user = userRepository.findById(id)
-					.orElseThrow(() ->  new UserException("User Not Found"));
+					.orElseThrow(() ->  new UserException(environment.getProperty("status.login.error.message")));
 		if(user.getType().equalsIgnoreCase("admin")) {
 		List<Book> bookList = getBookFromCsv();
 		bookList.forEach(book -> {
@@ -62,6 +69,7 @@ public class BookService implements IBookService {
 		return new ResponseDTO("You do not have permission to add book");	
 	}			
 }
+	
 	
 	@Override
 	public List<Book> getAllBooks() {
