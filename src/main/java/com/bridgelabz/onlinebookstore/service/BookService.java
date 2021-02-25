@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
-
 import com.bridgelabz.onlinebookstore.dto.BookDTO;
 import com.bridgelabz.onlinebookstore.dto.ResponseDTO;
 import com.bridgelabz.onlinebookstore.exception.UserException;
@@ -22,6 +21,8 @@ import com.bridgelabz.onlinebookstore.repository.UserRepository;
 import com.bridgelabz.onlinebookstore.utility.Token;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
+import org.modelmapper.ModelMapper;
+
 
 @Service
 @PropertySource("classpath:status.properties")
@@ -35,14 +36,14 @@ public class BookService implements IBookService {
 	
 	@Autowired
 	private UserRepository userRepository;
-	
+
 	
 	@Override
 	public ResponseDTO addBook(String token, BookDTO bookDTO) throws UserException {
 		int id = Token.decodeToken(token);
 		User user = userRepository.findById(id)
 				.orElseThrow(() ->  new UserException(environment.getProperty("status.login.error.message")));
-		Book book = new Book(bookDTO);
+		Book book =new Book(bookDTO);
 		if(user.getType().equalsIgnoreCase("admin")) {
 			bookRepository.save(book);
 			return new ResponseDTO("Book Added Successfully");
@@ -96,5 +97,4 @@ public class BookService implements IBookService {
 	}
 	return null;
 	}	
-
 }
