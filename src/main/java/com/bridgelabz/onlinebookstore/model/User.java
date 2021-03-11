@@ -16,6 +16,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.bridgelabz.onlinebookstore.dto.UserDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Data;
 import lombok.ToString;
@@ -38,6 +40,7 @@ public @Data @ToString class User {
 	private String password;
 	private boolean isVerify;
 	
+	@JsonIgnore
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<Role> role;
 

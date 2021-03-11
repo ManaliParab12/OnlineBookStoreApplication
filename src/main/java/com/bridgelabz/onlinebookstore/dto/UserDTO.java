@@ -31,6 +31,6 @@ public @ToString @Data class UserDTO {
 	@Pattern(regexp = "(?=.*[A-Z])(?=.*[0-9])(?=.*[!?#@$]{1})[a-zA-Z0-9!?#@$]{8,32}$", message = "Password invalid")
 	public String password;
 	
-	public String role;
+//	public String role;
 
 }

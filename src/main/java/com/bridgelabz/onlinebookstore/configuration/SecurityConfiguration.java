@@ -15,6 +15,8 @@ import org.springframework.util.AntPathMatcher;
 
 import com.bridgelabz.onlinebookstore.service.IUserService;
 
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -41,12 +43,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.httpBasic().disable();
+		http.csrf().disable(); 
 		http
 			.authorizeRequests()
-//				.antMatchers("/all").permitAll()
+				.antMatchers("/all/**").permitAll()
 				.antMatchers("/getmessage").hasRole("ADMIN")
-				.antMatchers("/user/delete").hasRole("ADMIN")
+				.antMatchers("/delete").hasRole("ADMIN")
 				.anyRequest().authenticated()
 				.and()
 			.formLogin().permitAll()
@@ -64,4 +66,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 //                                   "/swagger-ui.html",
 //                                   "/webjars/**");
 //    }
+   
+	
+//    @Override
+//    public void configure(WebSecurity web) throws Exception {    
+//        web.ignoring().antMatchers("/v2/api-docs/**");
+//        web.ignoring().antMatchers("/swagger.json");
+//        web.ignoring().antMatchers("/swagger-ui.html");
+//        web.ignoring().antMatchers("/swagger-resources/**");
+//        web.ignoring().antMatchers("/webjars/**");
+//    }   
 }

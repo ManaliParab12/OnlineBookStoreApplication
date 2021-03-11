@@ -10,10 +10,14 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.Data;
 
 @Entity
 @Table(name = "role")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public @Data  class Role {
 	
 	@Id
@@ -23,6 +27,7 @@ public @Data  class Role {
 	
 	private String role;
 	
+	@JsonIgnore
 	@ManyToMany(mappedBy="role")
 	private List<User> user;
 

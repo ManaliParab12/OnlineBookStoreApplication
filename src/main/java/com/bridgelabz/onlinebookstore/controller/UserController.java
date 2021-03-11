@@ -82,7 +82,7 @@ public class UserController {
 	}
 	
 	
-	@PutMapping("/update/{email}")
+	@PutMapping("/update")
 	public ResponseEntity<ResponseDTO> updateUser(@Valid @RequestParam ("email") String email, UserDTO userDTO) throws UserException {
 		 ResponseDTO responseDTO = userService.updateUser(email, userDTO);
 	     return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
