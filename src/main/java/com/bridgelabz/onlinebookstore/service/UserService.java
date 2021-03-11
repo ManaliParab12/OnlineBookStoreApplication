@@ -1,16 +1,25 @@
 package com.bridgelabz.onlinebookstore.service;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.bridgelabz.onlinebookstore.dto.ResponseDTO;
 import com.bridgelabz.onlinebookstore.dto.UserDTO;
 import com.bridgelabz.onlinebookstore.exception.UserException;
+import com.bridgelabz.onlinebookstore.model.Role;
 import com.bridgelabz.onlinebookstore.model.User;
 import com.bridgelabz.onlinebookstore.repository.UserRepository;
 import com.bridgelabz.onlinebookstore.utility.Token;
@@ -33,7 +42,8 @@ public class UserService implements IUserService {
 	
 	public ResponseDTO registerUser(UserDTO userDTO) throws UserException {
 		String password = bCryptPasswordEncoder.encode(userDTO.getPassword());
-		User user = new User(userDTO);
+		User user = new User(userDTO, Arrays.asList(new Role("USER")));
+//		User user = new User(userDTO);
 		if(userRepository.findByEmail(user.getEmail()).isPresent())
 			throw new UserException("User is Already Registered with this Email Id");
 		user.setPassword(password);
@@ -106,5 +116,19 @@ public class UserService implements IUserService {
         		 		.orElseThrow(() -> new UserException(environment.getProperty("status.login.error.message")));
         userRepository.delete(user);
         return ResponseDTO.getResponse("Record has been successfully deleted", user);
-    }	
+    }
+
+	@Override
+	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+		User user = userRepository.findByEmail(userName)
+				.orElseThrow(() -> new UsernameNotFoundException("Email" + userName + "Not Found"));
+		return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), 
+				getAuthorities(user));
+	}	
+	
+	private Collection<? extends GrantedAuthority> getAuthorities(User user) {
+		String[] userRoles = user.getRole().stream().map(role -> role.getRole()).toArray(String[]:: new);
+		Collection< GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(userRoles);
+		return authorities;
+	}
 }

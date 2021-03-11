@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,7 +30,18 @@ import com.bridgelabz.onlinebookstore.service.IUserService;
 public class UserController {
 	
 	@Autowired
-	private IUserService userService;	
+	private IUserService userService;		
+
+	@GetMapping("/all")
+	public String greetingsAll() {
+		return "Spring security for All";
+	}
+	
+	@GetMapping("/getmessage")
+	public String greetings() {
+		return "Spring security";
+	}
+	
 	
 	@PostMapping("/register")
 	public ResponseEntity<ResponseDTO> registerUser(@Valid @RequestBody UserDTO userDTO) throws UserException {
@@ -55,14 +67,13 @@ public class UserController {
 		 return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);		
 	}
 	
-	
-	@GetMapping("/Get")
+	@GetMapping("/getuser")
 	public ResponseEntity<User> getUser(@RequestParam("email") String email) {
 		return new ResponseEntity<>(userService.getUserByEmail(email).get(), HttpStatus.OK);		
 	}
 	
 	
-	@GetMapping("/allusers")
+	@GetMapping("/")
 	public ResponseEntity<ResponseDTO> getAllUser() {
 		 List<User> userList = null;
 	     userList = userService.getAllUser();

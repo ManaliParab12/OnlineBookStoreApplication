@@ -3,12 +3,14 @@ package com.bridgelabz.onlinebookstore.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.security.core.userdetails.UserDetailsService;
+
 import com.bridgelabz.onlinebookstore.dto.ResponseDTO;
 import com.bridgelabz.onlinebookstore.dto.UserDTO;
 import com.bridgelabz.onlinebookstore.exception.UserException;
 import com.bridgelabz.onlinebookstore.model.User;
 
-public interface IUserService {
+public interface IUserService extends UserDetailsService {
 	
 	ResponseDTO registerUser(UserDTO userDTO) throws UserException;
 	

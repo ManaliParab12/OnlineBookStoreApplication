@@ -55,7 +55,7 @@ public class EmailService implements IEmailService {
 	private String verificationURL(String token) {
 		System.out.println("Token : " +token);
 		return "Click on below link to verify \n" +
-				"http://localhost:8080/swagger-ui.html#!/user-controller/verifyUserUsingGET" +
+				"http://localhost:8081/swagger-ui.html#!/user-controller/verifyUserUsingGET" +
 				"\n Token : " +token;
 	}
 	
@@ -70,7 +70,7 @@ public class EmailService implements IEmailService {
 	
 	private String resetURL(String token) {
 		return "Click on below link to Reset your Password \n" +
-				"http://localhost:8080/swagger-ui.html#!/user-controller/resetPasswordUsingPOST" +
+				"http://localhost:8081/swagger-ui.html#!/user-controller/resetPasswordUsingPOST" +
 				"\n Token : " +token;				
 	}
 }

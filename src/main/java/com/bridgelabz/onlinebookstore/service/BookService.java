@@ -44,12 +44,12 @@ public class BookService implements IBookService {
 		User user = userRepository.findById(id)
 				.orElseThrow(() ->  new UserException(environment.getProperty("status.login.error.message")));
 		Book book =new Book(bookDTO);
-		if(user.getType().equalsIgnoreCase("admin")) {
+//		if(user.getType().equalsIgnoreCase("admin")) {
 			bookRepository.save(book);
 			return new ResponseDTO("Book Added Successfully");
-		} else {
-			return new ResponseDTO("You do not have permission to add book");	
-		}	
+//		} else {
+//			return new ResponseDTO("You do not have permission to add book");	
+//		}	
 	}
 	
 	
@@ -59,16 +59,16 @@ public class BookService implements IBookService {
 		System.out.println("Printing token" +id);
 		User user = userRepository.findById(id)
 					.orElseThrow(() ->  new UserException(environment.getProperty("status.login.error.message")));
-		if(user.getType().equalsIgnoreCase("admin")) {
+//		if(user.getType().equalsIgnoreCase("admin")) {
 		List<Book> bookList = getBookFromCsv();
 		bookList.forEach(book -> {
 			book.setBookQuantity(5);
 			bookRepository.save(book);
 		});
 		return new ResponseDTO("Book Added Successfully");	
-	} else {
-		return new ResponseDTO("You do not have permission to add book");	
-	}			
+//	} else {
+//		return new ResponseDTO("You do not have permission to add book");	
+//	}			
 }
 	
 	
